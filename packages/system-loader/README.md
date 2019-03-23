@@ -1,6 +1,8 @@
 
 # system-loader
 
+**DEPRECATED**
+
 webpack loader for creating [styled-system][system] components from JSON
 
 ```sh
