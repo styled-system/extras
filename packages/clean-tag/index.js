@@ -20,10 +20,11 @@ export const omit = (obj, keys) => {
 export const Tag = React.forwardRef(({
   is: Tag = 'div',
   omitProps = [],
+  omitAdditionalProps = [],
   ...props
 }, ref) => React.createElement(Tag, {
   ref,
-  ...omit(props, omitProps)
+  ...omit(props, omitProps.concat(omitAdditionalProps))
 }))
 
 Tag.displayName = 'Clean.div'
