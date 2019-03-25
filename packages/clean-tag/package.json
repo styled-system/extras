@@ -14,7 +14,7 @@
   "dependencies": {
     "html-tags": "^2.0.0"
   },
-  "peerDependencies: {
+  "peerDependencies": {
     "react": "^16.8.5",
     "styled-system": "^3.2.1"
   },
