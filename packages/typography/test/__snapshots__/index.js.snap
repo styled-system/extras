@@ -2,6 +2,20 @@
 
 exports[`returns a styles object 1`] = `
 Object {
+  "&": Array [
+    Object {
+      "fontFamily": "\\"Avenir Next\\", system-ui, sans-serif",
+      "lineHeight": 1.5,
+    },
+    Object {
+      "fontFamily": "\\"Avenir Next\\", system-ui, sans-serif",
+    },
+    Object {
+      "lineHeight": 1.5,
+    },
+    Array [],
+    Array [],
+  ],
   "body": Array [
     Object {
       "fontFamily": "\\"Avenir Next\\", system-ui, sans-serif",
