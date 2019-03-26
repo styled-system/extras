@@ -15,8 +15,8 @@
     "html-tags": "^2.0.0"
   },
   "peerDependencies": {
-    "react": "^16.8.5",
-    "styled-system": "^3.2.1"
+    "react": ">=16.3",
+    "styled-system": ">=1.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.2.3",
