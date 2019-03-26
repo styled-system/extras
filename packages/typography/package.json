@@ -24,9 +24,11 @@
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-helmet": "^5.2.0",
+    "styled-components": "^4.2.0",
     "typography-theme-lincoln": "^0.16.19"
   },
   "dependencies": {
+    "lodash.flattendeep": "^4.4.0",
     "lodash.merge": "^4.6.1",
     "lodash.omit": "^4.5.0",
     "lodash.pick": "^4.4.0",

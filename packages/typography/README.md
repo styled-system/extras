@@ -133,6 +133,18 @@ export default {
 }
 ```
 
+## Scoped Styles
+
+Styled System Typography can be "scoped" to a wrapping `<div>` or other element instead of adding global styles.
+This approach **will increase CSS specificity** due to the class selector required, which will make overriding styles within the component more difficult. **Use with caution**.
+
+```jsx
+import styled from '@emotion/styled'
+import typography from '@styled-system/typography'
+
+const Typography = styled.div(typography)
+```
+
 ---
 
 ### Related
