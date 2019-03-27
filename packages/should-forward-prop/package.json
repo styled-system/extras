@@ -1,0 +1,20 @@
+{
+  "name": "@styled-system/should-forward-prop",
+  "version": "1.0.0-0",
+  "description": "Utility for filtering Styled System props with Emotion's shouldForwardProp option",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava"
+  },
+  "keywords": [],
+  "author": "Brent Jackson <jxnblk@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@emotion/is-prop-valid": "^0.7.3",
+    "styled-system": "^4.1.0-0"
+  },
+  "devDependencies": {
+    "ava": "^1.4.1",
+    "nyc": "^13.3.0"
+  }
+}
