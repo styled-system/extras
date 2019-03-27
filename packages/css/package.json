@@ -1,0 +1,39 @@
+{
+  "name": "@styled-system/css",
+  "version": "1.0.0-0",
+  "description": "",
+  "main": "dist.js",
+  "scripts": {
+    "prepare": "babel index.js -o dist.js",
+    "test": "nyc ava"
+  },
+  "keywords": [],
+  "author": "Brent Jackson <jxnblk@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "lodash.flatten": "^4.4.0",
+    "lodash.merge": "^4.6.1",
+    "lodash.omit": "^4.5.0",
+    "lodash.pick": "^4.4.0",
+    "styled-system": "^4.1.0-0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.4.0",
+    "@babel/preset-env": "^7.4.2",
+    "@babel/register": "^7.4.0",
+    "ava": "^1.4.1",
+    "nyc": "^13.3.0"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ]
+  },
+  "nyc": {
+    "reporter": [
+      "lcov",
+      "html"
+    ]
+  }
+}
