@@ -50,7 +50,6 @@ const systemRE = new RegExp(
 )
 
 const styles = props => omit(props, systemProps)
-// const notEmpty = n => Object.keys(n).length > 0
 
 export const system = compose(
   styles,
