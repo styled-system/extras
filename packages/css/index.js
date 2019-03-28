@@ -13,39 +13,23 @@ import flatten from 'lodash.flatten'
 import merge from 'lodash.merge'
 
 const systemProps = [
+  ...Object.keys({
+    ...space.propTypes,
+    ...color.propTypes,
+    ...fontFamily.propTypes,
+    ...fontSize.propTypes,
+    ...fontWeight.propTypes,
+    ...lineHeight.propTypes,
+  }),
   'theme',
-  'margin',
-  'marginTop',
-  'marginRight',
-  'marginBottom',
-  'marginLeft',
-  'padding',
-  'paddingTop',
-  'paddingRight',
-  'paddingBottom',
-  'paddingLeft',
-  'm',
-  'mt',
-  'mr',
-  'mb',
-  'ml',
   'mx',
   'my',
-  'p',
-  'pt',
-  'pr',
-  'pb',
-  'pl',
   'px',
   'py',
   'color',
-  'bg',
-  'backgroundColor',
-  'fontSize',
-  'fontWeight',
-  'lineHeight',
 ]
-const systemRE = new RegExp(
+
+const systemRegExp = new RegExp(
   `^(${systemProps.join('|')})$`
 )
 
@@ -61,6 +45,7 @@ export const system = compose(
   lineHeight
 )
 
+
 export const css = style => (props = {}) => {
   const theme = props.theme || props
   const styleProps = pick(props, systemProps)
@@ -70,7 +55,7 @@ export const css = style => (props = {}) => {
   for (const key in style) {
     const value = style[key]
     if (!value || typeof value !== 'object') continue
-    if (systemRE.test(key)) continue
+    if (systemRegExp.test(key)) continue
     styles.push({
       [key]: css(value)({ theme })
     })
