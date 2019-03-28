@@ -1,6 +1,15 @@
 
 # clean-tag
 
+:warning:
+
+**NO LONGER MAINTAINED**
+
+If you're wanting to remove style props from HTML output, see [Emotion's `shouldForwardProp` API](https://emotion.sh/docs/styled#customizing-prop-forwarding)
+or check the [open issue on styled-components][sc-issue].
+
+---
+
 Removes unwanted style props from the underlying HTML element when using styled-components.
 
 If you see React warnings when using styled-components, this can help.
