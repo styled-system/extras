@@ -40,7 +40,17 @@ const Boop = props =>
 
 ## Props
 
-When using `@styled-system/css` with styled components, the following style props will be available on the component:
+When using `@styled-system/css` with styled components,
+Styled System props can be used on the resulting component.
+
+```jsx
+<Beep
+  color='primary'
+  bg='black'
+/>
+```
+
+The following style props will be available on the component:
 
 - `fontFamily`
 - `fontSize`
