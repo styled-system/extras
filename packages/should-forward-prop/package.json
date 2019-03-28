@@ -1,6 +1,6 @@
 {
   "name": "@styled-system/should-forward-prop",
-  "version": "1.0.0-0",
+  "version": "1.0.0",
   "description": "Utility for filtering Styled System props with Emotion's shouldForwardProp option",
   "main": "index.js",
   "scripts": {
