@@ -114,3 +114,16 @@ test('handles all core styled system props', t => {
     lineHeight: 1.5,
   })
 })
+
+test('works with the css prop', t => {
+  const res = css({
+    color: 'primary',
+    m: 0,
+    fontSize: 2,
+  })(theme)
+  t.deepEqual(res, {
+    color: 'tomato',
+    margin: 0,
+    fontSize: '16px',
+  })
+})

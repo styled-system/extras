@@ -62,7 +62,7 @@ export const system = compose(
 )
 
 export const css = style => (props = {}) => {
-  const { theme } = props
+  const theme = props.theme || props
   const styleProps = pick(props, systemProps)
   const styles = [
     ...system({ theme, ...style, ...styleProps })
