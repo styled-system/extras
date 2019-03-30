@@ -12,57 +12,58 @@ import pick from 'lodash.pick'
 import flatten from 'lodash.flatten'
 import merge from 'lodash.merge'
 
-const systemProps = [
-  ...Object.keys({
-    ...space.propTypes,
-    ...color.propTypes,
-    ...fontFamily.propTypes,
-    ...fontSize.propTypes,
-    ...fontWeight.propTypes,
-    ...lineHeight.propTypes,
-  }),
+const getSystemProps = funcs => [
+  ...funcs.map(fn => Object.keys(fn.propTypes))
+    .reduce((a, props) => [ ...a, ...props ], []),
   'theme',
   'mx',
   'my',
   'px',
   'py',
-  'color',
 ]
 
-const systemRegExp = new RegExp(
-  `^(${systemProps.join('|')})$`
-)
+export const createCSS = (funcs) => {
+  const systemProps = getSystemProps(funcs)
 
-const styles = props => omit(props, systemProps)
+  const systemRegExp = new RegExp(
+    `^(${systemProps.join('|')})$`
+  )
 
-export const system = compose(
-  styles,
+  const styles = props => omit(props, systemProps)
+
+  const system = compose(
+    styles,
+    ...funcs
+  )
+
+  const css = style => (props = {}) => {
+    const theme = props.theme || props
+    const styleProps = pick(props, systemProps)
+    const styles = [
+      ...system({ theme, ...style, ...styleProps })
+    ]
+    for (const key in style) {
+      const value = style[key]
+      if (!value || typeof value !== 'object') continue
+      if (systemRegExp.test(key)) continue
+      styles.push({
+        [key]: css(value)({ theme })
+      })
+    }
+    return merge(
+      ...flatten(styles.filter(Boolean))
+    )
+  }
+  return css
+}
+
+export const css = createCSS([
   space,
   color,
   fontFamily,
   fontSize,
   fontWeight,
   lineHeight
-)
-
-
-export const css = style => (props = {}) => {
-  const theme = props.theme || props
-  const styleProps = pick(props, systemProps)
-  const styles = [
-    ...system({ theme, ...style, ...styleProps })
-  ]
-  for (const key in style) {
-    const value = style[key]
-    if (!value || typeof value !== 'object') continue
-    if (systemRegExp.test(key)) continue
-    styles.push({
-      [key]: css(value)({ theme })
-    })
-  }
-  return merge(
-    ...flatten(styles.filter(Boolean))
-  )
-}
+])
 
 export default css

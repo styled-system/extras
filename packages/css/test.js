@@ -1,5 +1,6 @@
 import test from 'ava'
-import css from './index'
+import { width, space } from 'styled-system'
+import css, { createCSS } from './index'
 
 const theme = {
   colors: {
@@ -125,5 +126,23 @@ test('works with the css prop', t => {
     color: 'tomato',
     margin: 0,
     fontSize: '16px',
+  })
+})
+
+test('createCSS returns a custom css function', t => {
+  const func = createCSS([ width, space ])
+  const res = func({
+    width: [ 1/2, 1/4 ],
+    m: 3,
+    color: 'primary'
+  })({ theme })
+  t.is(typeof func, 'function')
+  t.deepEqual(res, {
+    width: '50%',
+    '@media screen and (min-width: 40em)': {
+      width: '25%',
+    },
+    margin: '16px',
+    color: 'primary',
   })
 })
