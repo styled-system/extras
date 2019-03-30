@@ -59,10 +59,10 @@ The following keys in your style object will work the same as Styled System prop
 - `mx`
 - `my`
 - `p`, `padding`
-- `pt`, paddingTop`
-- `pr`, paddingRight`
-- `pb`, paddingBottom`
-- `pl`, paddingLeft`
+- `pt`, `paddingTop`
+- `pr`, `paddingRight`
+- `pb`, `paddingBottom`
+- `pl`, `paddingLeft`
 - `px`
 - `py`
 
