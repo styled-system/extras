@@ -11,11 +11,11 @@ import omit from 'lodash.omit'
 import pick from 'lodash.pick'
 import flatten from 'lodash.flatten'
 import merge from 'lodash.merge'
+import pickBy from 'lodash.pickby'
 
 const getSystemProps = funcs => [
   ...funcs.map(fn => Object.keys(fn.propTypes))
     .reduce((a, props) => [ ...a, ...props ], []),
-  'theme',
   'mx',
   'my',
   'px',
@@ -29,7 +29,10 @@ export const createCSS = (funcs) => {
     `^(${systemProps.join('|')})$`
   )
 
-  const styles = props => omit(props, systemProps)
+  const styles = props => pickBy(
+    omit(props, [ 'theme', ...systemProps ]),
+    val => typeof val !== 'object'
+  )
 
   const system = compose(
     styles,
@@ -39,12 +42,11 @@ export const createCSS = (funcs) => {
   const css = style => (props = {}) => {
     const theme = props.theme || props
     const styleProps = pick(props, systemProps)
-    const styles = [
-      ...system({ theme, ...style, ...styleProps })
-    ]
+    const styles = flatten(system({ theme, ...style, ...styleProps }))
+
     for (const key in style) {
       const value = style[key]
-      if (!value || typeof value !== 'object') continue
+      if (!value || typeof value !== 'object' || Array.isArray(value)) continue
       if (systemRegExp.test(key)) continue
       styles.push({
         [key]: css(value)({ theme })
