@@ -76,6 +76,26 @@ test('returns nested system props styles', t => {
   })
 })
 
+test('returns nested responsive styles', t => {
+  const res = css({
+    color: 'primary',
+    h1: {
+      py: [3, 4],
+    }
+  })({ theme })
+  t.deepEqual(res, {
+    color: 'tomato',
+    h1: {
+      paddingTop: '16px',
+      paddingBottom: '16px',
+      '@media screen and (min-width: 40em)': {
+        paddingTop: '32px',
+        paddingBottom: '32px',
+      }
+    }
+  })
+})
+
 test('props override default styles', t => {
   const res = css({
     color: 'primary',
