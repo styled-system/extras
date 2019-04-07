@@ -10,6 +10,12 @@ const theme = {
     background: '#fff',
     primary: '#07c',
     secondary: '#05a',
+    modes: {
+      dark: {
+        text: '#fff',
+        background: '#000',
+      }
+    }
   },
   fontSizes: [
     12, 14, 16, 20, 24, 32, 48, 64, 96

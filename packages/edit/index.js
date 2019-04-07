@@ -89,20 +89,33 @@ export const FieldSet = ({
         }}>
         {name}
       </h3>
-      {Object.keys(value).map(key => (
-        <Field
-          key={key}
-          name={`${name}.${key}`}
-          value={value[key]}
-          onChange={val => {
-            setState({
-              [name]: {
-                [key]: val
-              }
-            })
-          }}
-        />
-      ))}
+      {Object.keys(value).map(key => {
+        const val = value[key]
+        if (val && typeof val === 'object') {
+          return (
+            <FieldSet
+              name={`${name}.${key}`}
+              value={val}
+              setState={setState}
+              {...props}
+            />
+          )
+        }
+        return (
+          <Field
+            key={key}
+            name={`${name}.${key}`}
+            value={val}
+            onChange={next => {
+              setState({
+                [name]: {
+                  [key]: next
+                }
+              })
+            }}
+          />
+        )
+      })}
     </div>
   )
 }
