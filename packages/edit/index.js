@@ -89,7 +89,7 @@ export const FieldSet = ({
         }}>
         {name}
       </h3>
-      {Object.keys(value).map(key => {
+      {Object.keys(omit(value, props.ignore)).map(key => {
         const val = value[key]
         if (val && typeof val === 'object') {
           return (
