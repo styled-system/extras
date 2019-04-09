@@ -49,34 +49,14 @@ export default props =>
           })}>
           Hello
         </h1>
-        <Field name='colors.text' />
-        <Readme />
+        <Field name='colors.text' type='color' />
         <ThemeControls
-          fieldTypes={{
-            colors: {
-              type: 'color',
-              options: [],
-            },
-            lineHeights: {
-              type: 'number',
-              step: 1/16,
-              min: 1,
-              max: 2,
-            },
-            fontSizes: {
-              type: 'select',
-              options: [
-                12, 14, 16, 18, 20, 24, 28, 32, 36, 40, 48, 56, 64
-              ]
-            }
-          }}
           css={{
-            position: 'fixed',
-            top: 0,
-            right: 0,
+            float: 'right',
             margin: 8,
           }}
         />
+        <Readme />
       </div>
     </EditProvider>
   </ThemeProvider>
