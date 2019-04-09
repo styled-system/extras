@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@emotion/core": "^10.0.10",
+    "color": "^3.1.0",
     "emotion-theming": "^10.0.10",
     "lodash.merge": "^4.6.1",
     "lodash.omit": "^4.5.0"
