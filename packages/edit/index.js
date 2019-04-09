@@ -4,6 +4,8 @@ import React, { useReducer, useContext } from 'react'
 import { ThemeProvider } from 'emotion-theming'
 import merge from 'lodash.merge'
 import omit from 'lodash.omit'
+import get from 'lodash.get'
+import set from 'lodash.set'
 import Color from 'color'
 
 export const EditContext = React.createContext({})
@@ -33,7 +35,67 @@ export const EditProvider = ({
   )
 }
 
+
+// context-aware field
+const Input = props => <input {...props} />
+
 export const Field = ({
+  name,
+  type,
+  options,
+  render,
+  ...props
+}) => {
+  const context = useContext(EditContext)
+  const value = get(context.state, name)
+  const onChange = e => {
+    context.setState(
+      set({}, name, e.target.value)
+    )
+  }
+
+  if (typeof render === 'function') {
+    return render({
+      name,
+      type,
+      options,
+      value,
+      onChange,
+      ...context,
+    })
+  }
+
+  const inputProps = {
+    name,
+    value,
+    onChange,
+    ...props
+  }
+
+  let field = <Input {...inputProps} />
+
+  switch (type) {
+    case 'number':
+      break
+    case 'select':
+      break
+    case 'color':
+      break
+  }
+
+  return (
+    <>
+      <label>
+        <div>
+          {name}
+        </div>
+        {field}
+      </label>
+    </>
+  )
+}
+
+export const TextField = ({
   type = 'text',
   name,
   value,
@@ -212,7 +274,7 @@ export const FieldSet = ({
         switch (type.type) {
           case 'number':
             return (
-              <Field
+              <TextField
                 key={key}
                 name={`${name}.${key}`}
                 {...type}
@@ -261,7 +323,7 @@ export const FieldSet = ({
             )
           default:
             return (
-              <Field
+              <TextField
                 key={key}
                 name={`${name}.${key}`}
                 value={val}

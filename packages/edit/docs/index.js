@@ -1,5 +1,9 @@
 import React from 'react'
-import { EditProvider, ThemeControls } from '../index'
+import {
+  EditProvider,
+  ThemeControls,
+  Field,
+} from '../index'
 import { ThemeProvider } from 'emotion-theming'
 import css from '@styled-system/css'
 import Readme from '../README.md'
@@ -45,6 +49,7 @@ export default props =>
           })}>
           Hello
         </h1>
+        <Field name='colors.text' />
         <Readme />
         <ThemeControls
           fieldTypes={{
