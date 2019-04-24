@@ -25,7 +25,10 @@ export const EditProvider = ({
   const context = {
     ignore,
     state,
-    setState
+    setState,
+    reset: () => {
+      setState(theme)
+    }
   }
 
   return (
@@ -255,5 +258,15 @@ export const ThemeControls = ({
         />
       ))}
     </div>
+  )
+}
+
+export const ResetButton = props => {
+  const { reset } = useContext(EditContext)
+  return (
+    <button
+      {...props}
+      onClick={reset}
+    />
   )
 }

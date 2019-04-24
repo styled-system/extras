@@ -3,6 +3,7 @@ import {
   EditProvider,
   ThemeControls,
   Field,
+  ResetButton,
 } from '../index'
 import { ThemeProvider } from 'emotion-theming'
 import css from '@styled-system/css'
@@ -50,6 +51,9 @@ export default props =>
           Hello
         </h1>
         <Field name='colors.text' type='color' />
+        <ResetButton>
+          Reset
+        </ResetButton>
         <ThemeControls
           css={{
             float: 'right',
