@@ -1,6 +1,8 @@
 import test from 'ava'
 import { transformSync } from '@babel/core'
 import jsxSyntax from '@babel/plugin-syntax-jsx'
+import react from '@babel/preset-react'
+import emotion from '@emotion/babel-preset-css-prop'
 import system from './index'
 
 const plugins = [
@@ -9,6 +11,13 @@ const plugins = [
 ]
 
 const parse = jsx => transformSync(jsx, { plugins }).code
+const parseEmotion = jsx => transformSync(jsx, {
+  presets: [ emotion ],
+  plugins: [
+    jsxSyntax,
+    system,
+  ]
+}).code
 
 test('parses style props', t => {
   const result = parse(`
@@ -41,4 +50,125 @@ test('applies styles to existing css prop', t => {
   t.snapshot(result)
 })
 
-test.todo('applies styles to existing css prop functions')
+test('applies styles to existing css prop functions', t => {
+  const result = parse(`
+    <div
+      p={4}
+      css={cx({
+        color: 'tomato',
+      })}
+    />
+  `)
+  t.snapshot(result)
+})
+
+test('applies styles to existing inline css arrow functions', t => {
+  const result = parse(`
+    <div
+      p={4}
+      css={theme => ({
+        color: 'tomato',
+      })}
+    />
+  `)
+  t.snapshot(result)
+})
+
+test('applies styles to existing inline css arrow functions with return', t => {
+  const result = parse(`
+    <div
+      p={4}
+      css={theme => {
+        return {
+          color: 'tomato',
+        }
+      }}
+    />
+  `)
+  t.snapshot(result)
+})
+
+test.skip('applies styles to existing inline css arrow functions with array return', t => {
+  const result = parse(`
+    <div
+      p={4}
+      css={theme => {
+        return {
+          color: 'tomato',
+        }
+      }}
+    />
+  `)
+  t.is(typeof result, 'string')
+})
+
+test('handles array props', t => {
+  const result = parse(`
+    <div
+      m={[ 0, 4, 8 ]}
+    />
+  `)
+  t.snapshot(result)
+})
+
+test('handles multidirectional props', t => {
+  const result = parse(`
+    <div px={3} />
+  `)
+  t.snapshot(result)
+})
+
+test('handles responsive multidirectional props', t => {
+  const result = parse(`
+    <div px={[ 0, 2, 3 ]} />
+  `)
+  t.snapshot(result)
+})
+
+test('merges array prop styles', t => {
+  const result = parse(`
+    <div p={[ 0, 2 ]} bg={[ 'transparent', 'black' ]} />
+  `)
+  t.snapshot(result)
+})
+
+test('ignores array props that have a length greater than breakpoints', t => {
+  const result = parse(`
+    <div m={[ 0, 1, 2, 3, 4, 5, 6 ]} />
+  `)
+  t.snapshot(result)
+})
+
+test('kitchen sink', t => {
+  const result = parse(`
+    <div
+      m={[ 0, 1, 2 ]}
+      p={3}
+      bg='tomato'
+      color='white'
+      css={{
+        border: '2px solid gold',
+      }}
+    />
+  `)
+  console.log(result)
+})
+
+test.todo('handles array props with expressions')
+test.todo('handles array props with multiple keys')
+
+test('works with emotion plugin', t => {
+  const result = parseEmotion(`
+    import React from 'react'
+
+    export default () =>
+      <div
+        bg='black'
+        css={{
+          color: 'tomato'
+        }}
+      />
+  `)
+  // console.log(result)
+  t.snapshot(result)
+})

@@ -13,8 +13,11 @@
     "@babel/core": "^7.4.4",
     "@babel/plugin-syntax-jsx": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
     "@babel/register": "^7.4.4",
+    "@emotion/babel-preset-css-prop": "^10.0.9",
     "ava": "^1.4.1",
+    "babel-plugin-emotion": "^10.0.9",
     "nyc": "^14.0.0"
   },
   "ava": {
