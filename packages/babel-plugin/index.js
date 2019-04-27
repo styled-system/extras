@@ -2,6 +2,7 @@ const camelCase = require('lodash.camelcase')
 const cssProperties = require('known-css-properties').all
   .filter(prop => !/^-/.test(prop))
   .map(camelCase)
+const pkg = require('./package.json')
 
 const CSS_ID = '___systemCSS'
 
@@ -205,7 +206,7 @@ module.exports = function(babel, opts) {
                   t.identifier('css')
                 )
               ],
-              t.stringLiteral('babel-plugin-styled-system/css')
+              t.stringLiteral(pkg.name + '/css')
             )
           )
         }
