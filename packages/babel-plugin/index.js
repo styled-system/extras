@@ -1,4 +1,7 @@
-// const syntaxJSX = require('@babel/plugin-syntax-jsx')
+const camelCase = require('lodash.camelcase')
+const cssProperties = require('known-css-properties').all
+  .filter(prop => !/^-/.test(prop))
+  .map(camelCase)
 
 const CSS_ID = '__systemCSS'
 
@@ -7,9 +10,8 @@ const defaultOptions = {
 }
 
 const propNames = [
-  'color',
+  ...cssProperties,
   'bg',
-  'backgroundColor',
   'm',
   'mt',
   'mr',
@@ -24,18 +26,8 @@ const propNames = [
   'pl',
   'px',
   'py',
-  'margin',
-  'marginTop',
-  'marginRight',
-  'marginBottom',
-  'marginLeft',
   'marginX',
   'marginY',
-  'padding',
-  'paddingTop',
-  'paddingRight',
-  'paddingBottom',
-  'paddingLeft',
   'paddingX',
   'paddingY',
 ]
@@ -82,10 +74,8 @@ module.exports = function(babel, opts) {
       path.stop()
     },
     CallExpression (path, state) {
-      state.skipWrap = true
       path.get('arguments.0').traverse(visitCSSProp, state)
     },
-    // ArrowFunctionExpression (path, state) {}
   }
 
   // convert system props to CSS object
@@ -166,7 +156,7 @@ module.exports = function(babel, opts) {
     }
   }
 
-  const visitProps = {
+  const visitSystemProps = {
     JSXAttribute (path, state) {
       const name = path.node.name.name
       if (!props[name]) return
@@ -203,10 +193,10 @@ module.exports = function(babel, opts) {
 
   return {
     name: 'styled-system',
-    // inherits: syntaxJSX,
     visitor: {
       Program: {
         exit (path, state) {
+          if (!state.get('isJSX')) return
           path.unshiftContainer('body',
             t.importDeclaration(
               [
@@ -224,9 +214,10 @@ module.exports = function(babel, opts) {
         const name = path.node.name.name
         state.elementName = name
         state.props = []
-        path.traverse(visitProps, state)
+        path.traverse(visitSystemProps, state)
         applyCSSProp(path, state)
         path.traverse(wrapCSSProp, state)
+        state.set('isJSX', true)
       }
     }
   }

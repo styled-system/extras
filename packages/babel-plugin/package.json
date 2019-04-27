@@ -21,10 +21,11 @@
     "nyc": "^14.0.0"
   },
   "ava": {
-    "require": [
-    ]
+    "require": []
   },
   "dependencies": {
+    "known-css-properties": "^0.14.0",
+    "lodash.camelcase": "^4.3.0",
     "lodash.get": "^4.4.2"
   }
 }
