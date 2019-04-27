@@ -10,8 +10,12 @@ const plugins = [
   system,
 ]
 
-const parse = jsx => transformSync(jsx, { plugins }).code
+const parse = jsx => transformSync(jsx, {
+  configFile: false,
+  plugins
+}).code
 const parseEmotion = jsx => transformSync(jsx, {
+  configFile: false,
   presets: [ emotion ],
   plugins: [
     jsxSyntax,
@@ -88,7 +92,7 @@ test('applies styles to existing inline css arrow functions with return', t => {
   t.snapshot(result)
 })
 
-test.skip('applies styles to existing inline css arrow functions with array return', t => {
+test('applies styles to existing inline css arrow functions with array return', t => {
   const result = parse(`
     <div
       p={4}
@@ -100,6 +104,17 @@ test.skip('applies styles to existing inline css arrow functions with array retu
     />
   `)
   t.is(typeof result, 'string')
+})
+
+test('does not wrap non css props', t => {
+  const result = parse(`
+    <div
+      style={{
+        color: 'blue'
+      }}
+    />
+  `)
+  t.snapshot(result)
 })
 
 test('handles array props', t => {
@@ -144,6 +159,8 @@ test('kitchen sink', t => {
     <div
       m={[ 0, 1, 2 ]}
       p={3}
+      py={[ 4, 5 ]}
+      marginBottom={3}
       bg='tomato'
       color='white'
       css={{
@@ -151,7 +168,7 @@ test('kitchen sink', t => {
       }}
     />
   `)
-  console.log(result)
+  t.snapshot(result)
 })
 
 test.todo('handles array props with expressions')

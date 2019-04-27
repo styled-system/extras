@@ -1,3 +1,7 @@
+import syntaxJSX from '@babel/plugin-syntax-jsx'
+
+const CSS_ID = '__systemCSS'
+
 const defaultOptions = {
   breakpoints: [ '40em', '52em', '64em' ]
 }
@@ -66,17 +70,19 @@ const aliases = {
 
 const createMediaQuery = n => `@media screen and (min-width: ${n})`
 
-export default function(babel) {
+export default function(babel, opts) {
   const { types: t } = babel
-  let options = defaultOptions
-  let breakpoints
+  const options = Object.assign({}, defaultOptions, opts)
+  const mediaQueries = options.breakpoints.map(createMediaQuery)
+  const breakpoints = [ null, ...mediaQueries ]
 
   const visitCSSProp = {
     ObjectExpression (path, state) {
-      if (!t.isObjectExpression(path.node)) console.log('WUT', path.node)
       path.node.properties.unshift(...state.styles)
+      path.stop()
     },
     CallExpression (path, state) {
+      state.skipWrap = true
       path.get('arguments.0').traverse(visitCSSProp, state)
     },
     // ArrowFunctionExpression (path, state) {}
@@ -103,12 +109,12 @@ export default function(babel) {
           }
 
           const breakpointIndex = responsiveStyles.findIndex(style => {
-            return style.key.name === media
+            return style.key.value === media
           })
 
           if (breakpointIndex < 0) {
             style = t.objectProperty(
-              t.identifier(media),
+              t.stringLiteral(media),
               t.objectExpression([style])
             )
             responsiveStyles.push(style)
@@ -129,6 +135,7 @@ export default function(babel) {
 
   const applyCSSProp = (path, state) => {
     const styles = createStyles(state.props)
+    if (!styles.length) return
     // get or create css prop
     const cssIndex = path.node.attributes.findIndex(
       attr => attr.name.name === 'css'
@@ -143,6 +150,37 @@ export default function(babel) {
       path.node.attributes.push(cssAttribute)
     } else {
       path.get(`attributes.${cssIndex}.value`).traverse(visitCSSProp, { styles })
+    }
+  }
+
+
+  const __wrapCSSProp = {
+    ObjectExpression (path, state) {
+      if (state.skipWrap) console.log('dont wrap!!!')
+      const parent = path.findParent(p => p.isJSXAttribute())
+      if (parent.node.name.name !== 'css') return
+      if (!parent.get('value.expression').isObjectExpression()) {
+        console.log(parent.get('value.expression').node)
+      }
+      // wrap css prop
+      const call = t.callExpression(
+        t.identifier(CSS_ID),
+        [ path.node ]
+      )
+      path.replaceWith(call)
+      path.stop()
+    }
+  }
+  const wrapCSSProp = {
+    JSXAttribute (path, state) {
+      if (path.node.name.name !== 'css') return
+      const value = path.get('value.expression')
+      if (!value.isObjectExpression()) return
+      const call = t.callExpression(
+        t.identifier(CSS_ID),
+        [ value.node ]
+      )
+      value.replaceWith(call)
     }
   }
 
@@ -183,13 +221,22 @@ export default function(babel) {
 
   return {
     name: 'styled-system',
-    // what's the new hotness for this?
-    // inherits: require('@babel/plugin-syntax-jsx'),
+    inherits: syntaxJSX,
     visitor: {
-      Program (path, state) {
-        options = Object.assign({}, defaultOptions, state.opts)
-        const mediaQueries = options.breakpoints.map(createMediaQuery)
-        breakpoints = [ null, ...mediaQueries ]
+      Program: {
+        exit (path, state) {
+          path.unshiftContainer('body',
+            t.importDeclaration(
+              [
+                t.importSpecifier(
+                  t.identifier(CSS_ID),
+                  t.identifier('default')
+                )
+              ],
+              t.stringLiteral('babel-plugin-styled-system/css')
+            )
+          )
+        }
       },
       JSXOpeningElement (path, state) {
         const name = path.node.name.name
@@ -197,6 +244,7 @@ export default function(babel) {
         state.props = []
         path.traverse(visitProps, state)
         applyCSSProp(path, state)
+        path.traverse(wrapCSSProp, state)
       }
     }
   }
