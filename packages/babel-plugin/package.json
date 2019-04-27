@@ -1,0 +1,25 @@
+{
+  "name": "babel-plugin-styled-system",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nyc ava"
+  },
+  "keywords": [],
+  "author": "Brent Jackson <jxnblk@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/register": "^7.4.4",
+    "ava": "^1.4.1",
+    "nyc": "^14.0.0"
+  },
+  "ava": {
+    "require": [
+      "@babel/register"
+    ]
+  }
+}

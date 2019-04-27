@@ -1,0 +1,4 @@
+test.js*
+babel.config.js
+.nyc_output
+coverage
