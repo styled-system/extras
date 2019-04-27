@@ -1,7 +1,7 @@
 
 # @styled-system/babel-plugin
 
-Convert Styled System props to the `css` prop
+Use Styled System props on any JSX element
 
 ```sh
 npm i -D @styled-system/babel-plugin
