@@ -1,12 +1,6 @@
 module.exports = {
-  plugins: [
-    '@babel/plugin-syntax-jsx',
-  ],
+  plugins: [],
   presets: [
-    [
-      '@babel/preset-env', {
-        // modules: false
-      }
-    ]
+    '@babel/preset-env'
   ]
 }

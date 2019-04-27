@@ -1,15 +1,17 @@
 {
   "name": "@styled-system/babel-plugin",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "",
   "main": "index.js",
   "scripts": {
+    "prepare": "babel src -d dist",
     "test": "nyc ava"
   },
   "keywords": [],
   "author": "Brent Jackson <jxnblk@gmail.com>",
   "license": "MIT",
   "devDependencies": {
+    "@babel/cli": "^7.4.4",
     "@babel/core": "^7.4.4",
     "@babel/plugin-syntax-jsx": "^7.2.0",
     "@babel/preset-env": "^7.4.4",
