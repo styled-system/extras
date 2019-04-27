@@ -3,7 +3,7 @@ const cssProperties = require('known-css-properties').all
   .filter(prop => !/^-/.test(prop))
   .map(camelCase)
 
-const CSS_ID = '__systemCSS'
+const CSS_ID = '___systemCSS'
 
 const defaultOptions = {
   breakpoints: [ '40em', '52em', '64em' ]
@@ -202,7 +202,7 @@ module.exports = function(babel, opts) {
               [
                 t.importSpecifier(
                   t.identifier(CSS_ID),
-                  t.identifier('default')
+                  t.identifier('css')
                 )
               ],
               t.stringLiteral('babel-plugin-styled-system/css')
