@@ -33,6 +33,6 @@ module.exports = {
 
 - [x] Handle existing `css` prop functions
 - [x] Handle responsive array props
+- [x] Use values from theme
 - [ ] Parse `css` prop for Styled System props
-- [ ] Use values from theme
 
