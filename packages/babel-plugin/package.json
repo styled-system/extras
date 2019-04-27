@@ -22,7 +22,6 @@
   },
   "ava": {
     "require": [
-      "@babel/register"
     ]
   },
   "dependencies": {

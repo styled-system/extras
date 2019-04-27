@@ -1,4 +1,4 @@
-import syntaxJSX from '@babel/plugin-syntax-jsx'
+// const syntaxJSX = require('@babel/plugin-syntax-jsx')
 
 const CSS_ID = '__systemCSS'
 
@@ -70,7 +70,7 @@ const aliases = {
 
 const createMediaQuery = n => `@media screen and (min-width: ${n})`
 
-export default function(babel, opts) {
+module.exports = function(babel, opts) {
   const { types: t } = babel
   const options = Object.assign({}, defaultOptions, opts)
   const mediaQueries = options.breakpoints.map(createMediaQuery)
@@ -153,24 +153,6 @@ export default function(babel, opts) {
     }
   }
 
-
-  const __wrapCSSProp = {
-    ObjectExpression (path, state) {
-      if (state.skipWrap) console.log('dont wrap!!!')
-      const parent = path.findParent(p => p.isJSXAttribute())
-      if (parent.node.name.name !== 'css') return
-      if (!parent.get('value.expression').isObjectExpression()) {
-        console.log(parent.get('value.expression').node)
-      }
-      // wrap css prop
-      const call = t.callExpression(
-        t.identifier(CSS_ID),
-        [ path.node ]
-      )
-      path.replaceWith(call)
-      path.stop()
-    }
-  }
   const wrapCSSProp = {
     JSXAttribute (path, state) {
       if (path.node.name.name !== 'css') return
@@ -221,7 +203,7 @@ export default function(babel, opts) {
 
   return {
     name: 'styled-system',
-    inherits: syntaxJSX,
+    // inherits: syntaxJSX,
     visitor: {
       Program: {
         exit (path, state) {
