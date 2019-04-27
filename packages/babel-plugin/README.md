@@ -1,5 +1,5 @@
 
-# babel-plugin-styled-system
+# @styled-system/babel-plugin
 
 Convert Styled System props to the `css` prop
 
@@ -93,7 +93,7 @@ export default {
 
 ### Caveats
 
-- Breakpoints can *only* be configured in the Babel plugin options
+- Breakpoints can *only* be configured in the Babel plugin options (this is an intentional performance enhancement)
 - Theme values with *not* work when a custom function is used in the `css` prop
 
 To configure custom breakpoint values, set the `breakpoints` option in your Babel config file.
