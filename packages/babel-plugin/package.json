@@ -1,6 +1,6 @@
 {
-  "name": "babel-plugin-styled-system",
-  "version": "0.0.5",
+  "name": "@styled-system/babel-plugin",
+  "version": "0.0.6",
   "description": "",
   "main": "index.js",
   "scripts": {

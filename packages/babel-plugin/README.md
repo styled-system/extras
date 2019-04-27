@@ -1,7 +1,28 @@
 
 # babel-plugin-styled-system
 
-Convert Styled System props to `css` prop
+Convert Styled System props to the `css` prop
+
+```sh
+npm i -D @styled-system/babel-plugin
+```
+
+```jsx
+<h1 mt={0} mb={4} color='primary'>
+  Hello
+</h1>
+```
+
+- Use Styled System props on **any** JSX element
+- Support for **all** CSS properties
+- Picks up values from theme context
+- Use arrays for responsive styles
+- Removes props from rendered HTML
+
+## Getting Started
+
+Add the plugin to your Babel config.
+Be sure that `@emotion/babel-preset-css-prop` is included as well.
 
 ```js
 // babel.config.js
@@ -9,19 +30,34 @@ module.exports = {
   presets: [
     '@babel/preset-env',
     '@babel/preset-react',
+    '@emotion/babel-preset-css-prop',
   ],
   plugins: [
-    'babel-plugin-emotion',
-    'babel-plugin-styled-system',
+    '@styles-system/babel-plugin',
   ]
 }
 ```
+
+Use Styled System props or CSS properties as React props on any JSX element.
+
+```jsx
+<h1
+  color='tomato'
+  fontFamily='system-ui'
+  textDecoration='underline'
+  textDecorationStyle='wavy'
+/>
+```
+
+## What it does
+
+`@styled-system/babel-plugin` converts style props to objects in a `css` prop, allowing libraries like Emotion to parse the styles into CSS.
 
 ```jsx
 // in
 <div color='tomato' px={32} />
 
-// out
+// out (before Emotion's Babel plugin)
 <div
   css={{
     color: 'tomato',
@@ -31,8 +67,53 @@ module.exports = {
 />
 ```
 
-- [x] Handle existing `css` prop functions
-- [x] Handle responsive array props
-- [x] Use values from theme
-- [ ] Parse `css` prop for Styled System props
+## Use values from your theme
 
+When colors, fonts, font sizes, a spacing scale, or other values are definied in an Emotion theme context, the values can be referenced by key in the props.
+
+```js
+// example theme
+export default {
+  colors: {
+    primary: '#07c',
+    muted: '#f6f6f9'
+  }
+}
+```
+
+```jsx
+<div color='primary' bg='muted' />
+```
+
+## Use arrays for responsive styles
+
+```jsx
+<div width={[ '100%', '50%', '25%' ]} />
+```
+
+### Caveats
+
+- Breakpoints can *only* be configured in the Babel plugin options
+- Theme values with *not* work when a custom function is used in the `css` prop
+
+To configure custom breakpoint values, set the `breakpoints` option in your Babel config file.
+
+```js
+// babel.config.js
+module.exports = {
+  presets: [
+    '@babel/preset-env',
+    '@babel/preset-react',
+    '@emotion/babel-preset-css-prop',
+  ],
+  plugins: [
+    [ '@styles-system/babel-plugin', {
+      breakpoints: [
+        '32em', '48em', '64em', '72em',
+      ]
+    } ]
+  ]
+}
+```
+
+MIT License
