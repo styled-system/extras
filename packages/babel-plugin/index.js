@@ -188,16 +188,6 @@ module.exports = function(babel, opts) {
 
       if (t.isJSXExpressionContainer(path.node.value)) {
         value = path.node.value.expression
-        const visitPropValue = {
-          ArrayExpression (path) {
-            value = path.node.elements
-            path.stop()
-          },
-          NumericLiteral (path) {
-            value = path.node
-          },
-        }
-        path.get('value').traverse(visitPropValue)
       }
 
       if (Array.isArray(key)) {

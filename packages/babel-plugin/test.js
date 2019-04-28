@@ -4,6 +4,7 @@ import jsxSyntax from '@babel/plugin-syntax-jsx'
 import react from '@babel/preset-react'
 import emotion from '@emotion/babel-preset-css-prop'
 import system from './index'
+import css from './css'
 
 const plugins = [
   jsxSyntax,
@@ -183,6 +184,15 @@ test('handles expressions in props', t => {
   t.snapshot(result)
 })
 
+test('handles negative numbers', t => {
+  const result = parse(`
+    <div
+      mx={-4}
+    />
+  `)
+  t.snapshot(result)
+})
+
 test('works with emotion plugin', t => {
   const result = parseEmotion(`
     import React from 'react'
@@ -197,5 +207,18 @@ test('works with emotion plugin', t => {
   `)
   // console.log(result)
   t.snapshot(result)
+})
+
+test('css converts negative theme values', t => {
+  const style = css({
+    marginLeft: -4,
+    marginRight: -4,
+  })({
+    space: [ 0, 4, 8, 16, 32 ]
+  })
+  t.deepEqual(style, {
+    marginLeft: -32,
+    marginRight: -32,
+  })
 })
 
