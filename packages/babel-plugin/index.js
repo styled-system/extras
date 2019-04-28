@@ -10,8 +10,6 @@ const cssProperties = allCSSProperties
   .map(camelCase)
   .filter(prop => !isPropValid(prop))
 
-console.log(cssProperties.length)
-
 const defaultOptions = {
   breakpoints: [ '40em', '52em', '64em' ]
 }
@@ -19,6 +17,7 @@ const defaultOptions = {
 const propNames = [
   ...cssProperties,
   'color',
+  // todo: handle img, etc
   'width',
   'bg',
   'm',
