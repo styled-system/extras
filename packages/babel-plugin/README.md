@@ -21,6 +21,9 @@ npm i -D @styled-system/babel-plugin
 - Use arrays for responsive styles
 - Removes props from rendered HTML
 
+View Demo:
+[Code Sandbox](https://codesandbox.io/s/github/jxnblk/styled-system/tree/master/examples/babel-plugin)
+
 ## Getting Started
 
 Add the plugin to your Babel config.
