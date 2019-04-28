@@ -70,6 +70,13 @@ setKeys('borderStyles', ['borderStyle'])
 setKeys('radii', ['borderRadius'])
 setKeys('zIndices', ['zIndex'])
 
+const getScaleValue = (scale, x) => {
+  if (typeof x !== 'number' || x >= 0) return get(scale, x, x)
+  const abs = Math.abs(x)
+  const n = get(scale, abs, abs)
+  return n * -1
+}
+
 export const css = styles => theme => {
   const result = {}
   for (const key in styles) {
@@ -78,7 +85,7 @@ export const css = styles => theme => {
       result[key] = css(value)(theme)
       continue
     }
-    result[key] = get(theme, `${keys[key]}.${value}`, value)
+    result[key] = getScaleValue(get(theme, `${keys[key]}.${value}`, {}), value)
   }
   return result
 }

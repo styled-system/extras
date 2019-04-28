@@ -95,6 +95,10 @@ export default {
 
 - Breakpoints can *only* be configured in the Babel plugin options (this is an intentional performance enhancement)
 - Theme values with *not* work when a custom function is used in the `css` prop
+- Does not parse props on SVG elements
+- This does not use the core `styled-system` package under the hood and is an alternative implementation. This is **not** intended to be used with components built with `styled-system` and may work differently than exppected.
+- Does not transform fractional width values
+- Does not include default scales for `space` or `fontSizes`
 
 To configure custom breakpoint values, set the `breakpoints` option in your Babel config file.
 
