@@ -17,9 +17,21 @@ const defaultOptions = {
 
 const propNames = [
   ...cssProperties,
+  // props included in isPropValid
   'color',
   // todo: handle img, etc
   'width',
+  'fontFamily',
+  'fontSize',
+  'fontWeight',
+  'fontStyle',
+  'display',
+  'opacity',
+  'overflow',
+  'textDecoration',
+  'transform',
+  'cursor',
+  // system props
   'bg',
   'm',
   'mt',
