@@ -85,7 +85,7 @@ export const css = styles => theme => {
       result[key] = css(value)(theme)
       continue
     }
-    result[key] = getScaleValue(get(theme, `${keys[key]}.${value}`, {}), value)
+    result[key] = getScaleValue(get(theme, keys[key], {}), value)
   }
   return result
 }
