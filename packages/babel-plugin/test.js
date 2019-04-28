@@ -174,6 +174,15 @@ test('kitchen sink', t => {
 test.todo('handles array props with expressions')
 test.todo('handles array props with multiple keys')
 
+test('handles expressions in props', t => {
+  const result = parse(`
+    <div
+      color={props.color}
+    />
+  `)
+  t.snapshot(result)
+})
+
 test('works with emotion plugin', t => {
   const result = parseEmotion(`
     import React from 'react'
@@ -189,3 +198,4 @@ test('works with emotion plugin', t => {
   // console.log(result)
   t.snapshot(result)
 })
+
