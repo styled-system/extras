@@ -1,6 +1,7 @@
 const camelCase = require('lodash.camelcase')
 const allCSSProperties = require('known-css-properties').all
 const isPropValid = require('@emotion/is-prop-valid').default
+const svgTags = require('svg-tags')
 const pkg = require('./package.json')
 
 const CSS_ID = '___systemCSS'
@@ -220,6 +221,7 @@ module.exports = function(babel, opts) {
       },
       JSXOpeningElement (path, state) {
         const name = path.node.name.name
+        if (svgTags.includes(name)) return
         state.elementName = name
         state.props = []
         path.traverse(visitSystemProps, state)
