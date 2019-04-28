@@ -1,0 +1,35 @@
+{
+  "name": "@styled-system/babel-plugin",
+  "version": "0.0.19",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "prepare": "babel src -d dist",
+    "test": "nyc ava"
+  },
+  "keywords": [],
+  "author": "Brent Jackson <jxnblk@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-syntax-jsx": "^7.2.0",
+    "@babel/preset-env": "^7.4.4",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/register": "^7.4.4",
+    "@emotion/babel-preset-css-prop": "^10.0.9",
+    "ava": "^1.4.1",
+    "babel-plugin-emotion": "^10.0.9",
+    "nyc": "^14.0.0"
+  },
+  "ava": {
+    "require": []
+  },
+  "dependencies": {
+    "@emotion/is-prop-valid": "^0.7.3",
+    "known-css-properties": "^0.14.0",
+    "lodash.camelcase": "^4.3.0",
+    "lodash.get": "^4.4.2",
+    "svg-tags": "^1.0.0"
+  }
+}
