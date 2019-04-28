@@ -1,10 +1,16 @@
 const camelCase = require('lodash.camelcase')
-const cssProperties = require('known-css-properties').all
-  .filter(prop => !/^-/.test(prop))
-  .map(camelCase)
+const allCSSProperties = require('known-css-properties').all
+const isPropValid = require('@emotion/is-prop-valid').default
 const pkg = require('./package.json')
 
 const CSS_ID = '___systemCSS'
+
+const cssProperties = allCSSProperties
+  .filter(prop => !/^-/.test(prop))
+  .map(camelCase)
+  .filter(prop => !isPropValid(prop))
+
+console.log(cssProperties.length)
 
 const defaultOptions = {
   breakpoints: [ '40em', '52em', '64em' ]
@@ -12,6 +18,8 @@ const defaultOptions = {
 
 const propNames = [
   ...cssProperties,
+  'color',
+  'width',
   'bg',
   'm',
   'mt',
@@ -129,7 +137,7 @@ module.exports = function(babel, opts) {
     if (!styles.length) return
     // get or create css prop
     const cssIndex = path.node.attributes.findIndex(
-      attr => attr.name.name === 'css'
+      attr => attr.name && attr.name.name === 'css'
     )
     if (cssIndex < 0) {
       const cssAttribute = t.jSXAttribute(
