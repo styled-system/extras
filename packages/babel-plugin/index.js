@@ -89,14 +89,33 @@ module.exports = function(babel, opts) {
   const mediaQueries = options.breakpoints.map(createMediaQuery)
   const breakpoints = [ null, ...mediaQueries ]
 
-  const visitCSSProp = {
-    ObjectExpression (path, state) {
-      path.node.properties.unshift(...state.styles)
-      path.stop()
-    },
-    CallExpression (path, state) {
-      path.get('arguments.0').traverse(visitCSSProp, state)
-    },
+  const visitSystemProps = {
+    JSXAttribute (path, state) {
+      const name = path.node.name.name
+      if (!props[name]) return
+      if (name === 'css') return
+
+      const key = aliases[name] || name
+      let value = path.node.value
+
+      if (t.isJSXExpressionContainer(path.node.value)) {
+        value = path.node.value.expression
+        if (t.isArrayExpression(value)) {
+          value = value.elements
+        }
+      }
+
+      if (Array.isArray(key)) {
+        // handle mx, my, px, py, etc
+        key.forEach(k => {
+          state.props.push({ key: k, value })
+        })
+      } else {
+        state.props.push({ key, value })
+      }
+
+      path.remove()
+    }
   }
 
   // convert system props to CSS object
@@ -144,13 +163,25 @@ module.exports = function(babel, opts) {
     return [...styles, ...responsiveStyles]
   }
 
+  const visitCSSProp = {
+    ObjectExpression (path, state) {
+      path.node.properties.unshift(...state.styles)
+      path.stop()
+    },
+    CallExpression (path, state) {
+      path.get('arguments.0').traverse(visitCSSProp, state)
+    },
+  }
+
   const applyCSSProp = (path, state) => {
     const styles = createStyles(state.props)
     if (!styles.length) return
     // get or create css prop
-    const cssIndex = path.node.attributes.findIndex(
-      attr => attr.name && attr.name.name === 'css'
-    )
+    const cssIndex = path.node.attributes
+      .filter(attr => t.isJSXAttribute(attr))
+      .findIndex(
+        attr => attr.name && attr.name.name === 'css'
+      )
     if (cssIndex < 0) {
       const cssAttribute = t.jSXAttribute(
         t.jSXIdentifier('css'),
@@ -174,32 +205,6 @@ module.exports = function(babel, opts) {
         [ value.node ]
       )
       value.replaceWith(call)
-    }
-  }
-
-  const visitSystemProps = {
-    JSXAttribute (path, state) {
-      const name = path.node.name.name
-      if (!props[name]) return
-      if (name === 'css') return
-
-      const key = aliases[name] || name
-      let value = path.node.value
-
-      if (t.isJSXExpressionContainer(path.node.value)) {
-        value = path.node.value.expression
-      }
-
-      if (Array.isArray(key)) {
-        // handle mx, my, px, py, etc
-        key.forEach(k => {
-          state.props.push({ key: k, value })
-        })
-      } else {
-        state.props.push({ key, value })
-      }
-
-      path.remove()
     }
   }
 

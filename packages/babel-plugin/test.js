@@ -2,7 +2,8 @@ import test from 'ava'
 import { transformSync } from '@babel/core'
 import jsxSyntax from '@babel/plugin-syntax-jsx'
 import react from '@babel/preset-react'
-import emotion from '@emotion/babel-preset-css-prop'
+import emotionPreset from '@emotion/babel-preset-css-prop'
+import emotionPlugin from 'babel-plugin-emotion'
 import system from './index'
 import css from './css'
 
@@ -17,11 +18,12 @@ const parse = jsx => transformSync(jsx, {
 }).code
 const parseEmotion = jsx => transformSync(jsx, {
   configFile: false,
-  presets: [ emotion ],
+  presets: [
+    emotionPreset
+  ],
   plugins: [
-    jsxSyntax,
-    system,
-  ]
+    ...plugins,
+  ],
 }).code
 
 test('parses style props', t => {
@@ -205,7 +207,18 @@ test('works with emotion plugin', t => {
         }}
       />
   `)
-  // console.log(result)
+  t.snapshot(result)
+})
+
+test('works with emotion plugin without css prop', t => {
+  const result = parseEmotion(`
+    import React from 'react'
+
+    export default () =>
+      <Box
+        mx='auto'
+      />
+  `)
   t.snapshot(result)
 })
 
