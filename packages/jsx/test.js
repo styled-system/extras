@@ -85,3 +85,51 @@ test('renders nested styles', () => {
     target: ':hover'
   })
 })
+
+test('renders bi-directional props', () => {
+  const json = renderJSON(
+    <div
+      css={{
+        px: 8,
+        py: 16,
+        my: 32,
+      }}
+    />
+  )
+  expect(json).toHaveStyleRule('padding-left', '8px')
+  expect(json).toHaveStyleRule('padding-right', '8px')
+  expect(json).toHaveStyleRule('padding-top', '16px')
+  expect(json).toHaveStyleRule('padding-bottom', '16px')
+  expect(json).toHaveStyleRule('margin-top', '32px')
+  expect(json).toHaveStyleRule('margin-bottom', '32px')
+})
+
+test('renders with functional arguments', () => {
+  const json = renderJSON(
+    <div
+      css={t => ({
+        color: 'purple',
+      })}
+    />
+  )
+  expect(json).toHaveStyleRule('color', 'purple')
+})
+
+test('renders without props', () => {
+  const json = renderJSON(<div />)
+  expect(json.type).toBe('div')
+  expect(json.props).toEqual({})
+})
+
+test('renders functional values', () => {
+  const json = renderJSON(
+    <ThemeContext.Provider value={theme}>
+      <div
+        css={{
+          border: t => `1px solid ${t.colors.primary}`
+        }}
+      />
+    </ThemeContext.Provider>
+  )
+  expect(json).toHaveStyleRule('border', '1px solid #609')
+})
