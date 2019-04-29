@@ -94,7 +94,7 @@ const css = args => theme => {
   for (const key in styles) {
     const prop = aliases[key] || key
     const scaleName = scales[prop] || scales[prop[0]]
-    const scale = get(theme, scaleName, {})
+    const scale = get(theme, scaleName, get(theme, prop, {}))
     const x = styles[key]
     // hot new shit
     const val = typeof x === 'function' ? x(theme) : x

@@ -133,3 +133,21 @@ test('renders functional values', () => {
   )
   expect(json).toHaveStyleRule('border', '1px solid #609')
 })
+
+test('picks up fallback theme values for non-standard properties', () => {
+  const json = renderJSON(
+    <ThemeContext.Provider
+      value={{
+        backgroundImage: {
+          cool: 'linear-gradient(cyan, magenta)'
+        }
+      }}>
+      <div
+        css={{
+          backgroundImage: 'cool',
+        }}
+      />
+    </ThemeContext.Provider>
+  )
+  expect(json).toHaveStyleRule('background-image', 'linear-gradient(cyan,magenta)')
+})
