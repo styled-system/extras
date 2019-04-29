@@ -38,7 +38,7 @@ module.exports = {
     '@emotion/babel-preset-css-prop',
   ],
   plugins: [
-    '@styles-system/babel-plugin',
+    '@styled-system/babel-plugin',
   ]
 }
 ```
