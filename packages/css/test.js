@@ -156,19 +156,3 @@ test('supports functional values', t => {
     color: 'tomato',
   })
 })
-
-test.todo('handles custom transforms')
-
-// breaking
-// test.skip('createCSS returns a custom css function')
-
-// breaking
-test.skip('props override default styles', t => {
-  const res = css({
-    color: 'primary',
-  })({ theme, color: 'secondary' })
-  t.deepEqual(res, {
-    color: 'cyan'
-  })
-})
-
