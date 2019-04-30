@@ -46,7 +46,7 @@ const Boop = styled('div')(
 The following keys in your style object will work the same as Styled System props, pulling values from your `theme` object.
 
 Property  | Theme Key
----|---|---
+---|---
 `fontFamily` | `fonts`
 `fontSize` | `fontSizes`
 `fontWeight` | `fontWeights`
