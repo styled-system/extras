@@ -21,6 +21,8 @@ const aliases = {
   ml: 'marginLeft',
   mx: [ 'marginLeft', 'marginRight' ],
   my: [ 'marginTop', 'marginBottom' ],
+  marginX: [ 'marginLeft', 'marginRight' ],
+  marginY: [ 'marginTop', 'marginBottom' ],
   p: 'padding',
   pt: 'paddingTop',
   pr: 'paddingRight',
@@ -28,6 +30,8 @@ const aliases = {
   pl: 'paddingLeft',
   px: [ 'paddingLeft', 'paddingRight' ],
   py: [ 'paddingTop', 'paddingBottom' ],
+  paddingX: [ 'paddingLeft', 'paddingRight' ],
+  paddingY: [ 'paddingTop', 'paddingBottom' ],
 }
 
 const scales = {

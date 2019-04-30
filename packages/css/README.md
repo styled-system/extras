@@ -25,11 +25,11 @@ const Beep = props =>
 ```
 
 ```js
-// usage with styled components
+// usage with a styled HOC
 import styled from '@emotion/styled'
 import css from '@styled-system/css'
 
-const Boop = styled(
+const Boop = styled('div')(
   css({
     fontSize: [ 4, 5, 6 ],
     color: 'primary',
@@ -41,32 +41,64 @@ const Boop = styled(
 )
 ```
 
-## Keys
+## Theme Keys
 
-The following keys in your style object will work the same as Styled System props, pulling values from your `theme` object and converting arrays to responsive styles.
+The following keys in your style object will work the same as Styled System props, pulling values from your `theme` object.
 
-- `fontFamily`
-- `fontSize`
-- `fontWeight`
-- `lineHeight`
-- `color`
-- `bg`, `backgroundColor`
-- `m`, `margin`
-- `mt`, `marginTop`
-- `mr`, `marginRight`
-- `mb`, `marginBottom`
-- `ml`, `marginLeft`
-- `mx`
-- `my`
-- `p`, `padding`
-- `pt`, `paddingTop`
-- `pr`, `paddingRight`
-- `pb`, `paddingBottom`
-- `pl`, `paddingLeft`
-- `px`
-- `py`
+Property  | Theme Key
+---|---|---
+`fontFamily` | `fonts`
+`fontSize` | `fontSizes`
+`fontWeight` | `fontWeights`
+`lineHeight` | `lineHeights`
+`letterSpacing` | `letterSpacings`
+`color` | `colors`
+`backgroundColor`, `bg` | `colors`
+`margin`, `m` | `space`
+`marginTop`, `mt` | `space`
+`marginRight`, `mr` | `space`
+`marginBottom`, `mb` | `space`
+`marginLeft`, `ml` | `space`
+`marginX`, `mx` | `space`
+`marginY`, `my` | `space`
+`padding`, `p` | `space`
+`paddingTop`, `pt` | `space`
+`paddingRight`, `pr` | `space`
+`paddingBottom`, `pb` | `space`
+`paddingLeft`, `pl` | `space`
+`paddingX`, `px` | `space`
+`paddingY`, `py` | `space`
+`border` | `borders`
+`borderTop` | `borders`
+`borderRight` | `borders`
+`borderBottom` | `borders`
+`borderLeft` | `borders`
+`borderColor` | `colors`
+`borderWidth` | `borderWidths`
+`borderStyle` | `borderStyles`
+`borderRadius` | `radii`
+`boxShadow` | `shadows`
+`zIndex` | `zIndices`
+`width` | `sizes`
+`minWidth` | `sizes`
+`maxWidth` | `sizes`
+`height` | `sizes`
+`minHeight` | `sizes`
+`maxHeight` | `sizes`
 
-In this example, `fontSize` accepts an array, and `borderBottom` is passed through as plain CSS.
+## Responsive Arrays
+
+All CSS properties accept arrays as values for responsive styles.
+
+```jsx
+<div
+  css={css({
+    fontSize: [ 4, 5, 6 ],
+  })}
+/>
+```
+
+In this example, `fontSize` accepts an array, picking up values from the `theme.fontSizes` scale, and `borderBottom` is passed through as plain CSS.
 
 ```jsx
 <div
@@ -78,18 +110,5 @@ In this example, `fontSize` accepts an array, and `borderBottom` is passed throu
   })}
 />
 ```
-
-## Props
-
-When using `@styled-system/css` with styled components,
-Styled System props can be used on the resulting component.
-
-```jsx
-<Beep
-  color='primary'
-  bg='black'
-/>
-```
-
 
 MIT License
