@@ -2,7 +2,6 @@ import get from 'lodash.get'
 
 const defaultBreakpoints = [40, 52, 64].map(n => n + 'em')
 
-// for compatibility with current version
 const defaultTheme = {
   space: [
     0, 4, 8, 16, 32, 64, 128, 256, 512
@@ -63,7 +62,6 @@ const scales = {
   borderRadius: 'radii',
   boxShadow: 'shadows',
   zIndex: 'zIndices',
-  // new/breaking
   width: 'sizes',
   minWidth: 'sizes',
   maxWidth: 'sizes',
@@ -112,7 +110,6 @@ export const css = args => (props = {}) => {
     const scaleName = scales[prop] || scales[prop[0]]
     const scale = get(theme, scaleName, get(theme, prop, {}))
     const x = styles[key]
-    // hot new shit
     const val = typeof x === 'function' ? x(theme) : x
     if (val && typeof val === 'object') {
       result[prop] = css(val)(theme)
