@@ -4,8 +4,7 @@
   "description": "",
   "main": "dist.js",
   "scripts": {
-    "bench": "node benchmarks.js",
-    "prepare": "babel index.js -o dist.js && babel alt.js -o dist-alt.js",
+    "prepare": "babel index.js -o dist.js",
     "test": "nyc ava"
   },
   "keywords": [],
