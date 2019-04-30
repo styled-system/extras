@@ -85,15 +85,15 @@ export const responsive = styles => theme => {
       next[key] = value
       continue
     }
-    value.forEach((val, i) => {
+    for (let i = 0; i < value.length; i++) {
       const media = mediaQueries[i]
       if (!media) {
-        next[key] = val
-        return
+        next[key] = value[i]
+        continue
       }
       next[media] = next[media] || {}
-      next[media][key] = val
-    })
+      next[media][key] = value[i]
+    }
   }
 
   return next
@@ -117,9 +117,9 @@ export const css = args => (props = {}) => {
     }
     const value = get(scale, val, val)
     if (Array.isArray(prop)) {
-      prop.forEach(p => {
-        result[p] = value
-      })
+      for (let i = 0; i < prop.length; i++) {
+        result[prop[i]] = value
+      }
     } else {
       result[prop] = value
     }
