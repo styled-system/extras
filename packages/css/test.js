@@ -1,6 +1,6 @@
 import test from 'ava'
 import { width, space } from 'styled-system'
-import css, { createCSS } from './index'
+import css, { createCSS } from './alt'
 
 const theme = {
   colors: {
@@ -38,7 +38,7 @@ test('returns styles', t => {
     borderRadius: 4,
   })()
   t.deepEqual(res, {
-    fontSize: '32px',
+    fontSize: 32,
     color: 'blue',
     borderRadius: 4,
   })
@@ -50,12 +50,12 @@ test('returns system props styles', t => {
     fontSize: [ 2, 3, 4]
   })({ theme })
   t.deepEqual(res, {
-    fontSize: '16px',
+    fontSize: 16,
     '@media screen and (min-width: 40em)': {
-      fontSize: '24px',
+      fontSize: 24,
     },
     '@media screen and (min-width: 52em)': {
-      fontSize: '36px',
+      fontSize: 36,
     },
     color: 'tomato',
   })
@@ -86,17 +86,18 @@ test('returns nested responsive styles', t => {
   t.deepEqual(res, {
     color: 'tomato',
     h1: {
-      paddingTop: '16px',
-      paddingBottom: '16px',
+      paddingTop: 16,
+      paddingBottom: 16,
       '@media screen and (min-width: 40em)': {
-        paddingTop: '32px',
-        paddingBottom: '32px',
+        paddingTop: 32,
+        paddingBottom: 32,
       }
     }
   })
 })
 
-test('props override default styles', t => {
+// breaking change
+test.skip('props override default styles', t => {
   const res = css({
     color: 'primary',
   })({ theme, color: 'secondary' })
@@ -121,16 +122,16 @@ test('handles all core styled system props', t => {
   })({ theme })
   t.deepEqual(res, {
     margin: 0,
-    marginBottom: '8px',
+    marginBottom: 8,
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: '16px',
-    paddingTop: '32px',
-    paddingBottom: '32px',
+    padding: 16,
+    paddingTop: 32,
+    paddingBottom: 32,
     color: 'tomato',
     backgroundColor: 'cyan',
     fontFamily: 'Menlo, monospace',
-    fontSize: '24px',
+    fontSize: 24,
     fontWeight: 600,
     lineHeight: 1.5,
   })
@@ -145,11 +146,13 @@ test('works with the css prop', t => {
   t.deepEqual(res, {
     color: 'tomato',
     margin: 0,
-    fontSize: '16px',
+    fontSize: 16,
   })
 })
 
-test('createCSS returns a custom css function', t => {
+test.todo('handles custom transforms')
+
+test.skip('createCSS returns a custom css function', t => {
   const func = createCSS([ width, space ])
   const res = func({
     width: [ 1/2, 1/4 ],
@@ -162,7 +165,7 @@ test('createCSS returns a custom css function', t => {
     '@media screen and (min-width: 40em)': {
       width: '25%',
     },
-    margin: '16px',
+    margin: 16,
     color: 'primary',
   })
 })

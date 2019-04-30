@@ -4,7 +4,8 @@
   "description": "",
   "main": "dist.js",
   "scripts": {
-    "prepare": "babel index.js -o dist.js",
+    "bench": "node benchmarks.js",
+    "prepare": "babel index.js -o dist.js && babel alt.js -o dist-alt.js",
     "test": "nyc ava"
   },
   "keywords": [],
@@ -12,6 +13,7 @@
   "license": "MIT",
   "dependencies": {
     "lodash.flatten": "^4.4.0",
+    "lodash.get": "^4.4.2",
     "lodash.isobject": "^3.0.2",
     "lodash.merge": "^4.6.1",
     "lodash.omit": "^4.5.0",
@@ -25,6 +27,7 @@
     "@babel/preset-env": "^7.4.2",
     "@babel/register": "^7.4.0",
     "ava": "^1.4.1",
+    "benchmark": "^2.1.4",
     "nyc": "^13.3.0"
   },
   "ava": {
