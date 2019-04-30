@@ -1,5 +1,4 @@
 import test from 'ava'
-import { width, space } from 'styled-system'
 import css from './index'
 
 const theme = {
@@ -137,6 +136,24 @@ test('works with the css prop', t => {
     color: 'tomato',
     margin: 0,
     fontSize: 16,
+  })
+})
+
+test('works with functional arguments', t => {
+  const res = css(t => ({
+    color: t.colors.primary,
+  }))(theme)
+  t.deepEqual(res, {
+    color: 'tomato',
+  })
+})
+
+test('supports functional values', t => {
+  const res = css({
+    color: t => t.colors.primary,
+  })(theme)
+  t.deepEqual(res, {
+    color: 'tomato',
   })
 })
 
