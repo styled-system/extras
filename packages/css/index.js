@@ -1,71 +1,131 @@
-import {
-  compose,
-  space,
-  color,
-  fontFamily,
-  fontSize,
-  fontWeight,
-  lineHeight,
-} from 'styled-system'
-import omit from 'lodash.omit'
-import pick from 'lodash.pick'
-import flatten from 'lodash.flatten'
-import merge from 'lodash.merge'
-import pickBy from 'lodash.pickby'
+import get from 'lodash.get'
 
-const getSystemProps = funcs => [
-  ...funcs.map(fn => Object.keys(fn.propTypes))
-    .reduce((a, props) => [ ...a, ...props ], []),
-  'mx',
-  'my',
-  'px',
-  'py',
-]
+const defaultBreakpoints = [40, 52, 64].map(n => n + 'em')
 
-export const createCSS = (funcs) => {
-  const systemProps = getSystemProps(funcs)
-
-  const systemRegExp = new RegExp(
-    `^(${systemProps.join('|')})$`
-  )
-
-  const styles = props => pickBy(
-    omit(props, [ 'theme', ...systemProps ]),
-    val => typeof val !== 'object'
-  )
-
-  const system = compose(
-    styles,
-    ...funcs
-  )
-
-  const css = style => (props = {}) => {
-    const theme = props.theme || props
-    const styleProps = pick(props, systemProps)
-    const styles = flatten(system({ theme, ...style, ...styleProps }))
-
-    for (const key in style) {
-      const value = style[key]
-      if (!value || typeof value !== 'object' || Array.isArray(value)) continue
-      if (systemRegExp.test(key)) continue
-      styles.push({
-        [key]: css(value)({ theme })
-      })
-    }
-    return merge(
-      ...flatten(styles.filter(Boolean))
-    )
-  }
-  return css
+const defaultTheme = {
+  space: [
+    0, 4, 8, 16, 32, 64, 128, 256, 512
+  ],
+  fontSizes: [
+    12, 14, 16, 20, 24, 32, 48, 64, 72
+  ],
 }
 
-export const css = createCSS([
-  space,
-  color,
-  fontFamily,
-  fontSize,
-  fontWeight,
-  lineHeight
-])
+const aliases = {
+  bg: 'backgroundColor',
+  m: 'margin',
+  mt: 'marginTop',
+  mr: 'marginRight',
+  mb: 'marginBottom',
+  ml: 'marginLeft',
+  mx: [ 'marginLeft', 'marginRight' ],
+  my: [ 'marginTop', 'marginBottom' ],
+  marginX: [ 'marginLeft', 'marginRight' ],
+  marginY: [ 'marginTop', 'marginBottom' ],
+  p: 'padding',
+  pt: 'paddingTop',
+  pr: 'paddingRight',
+  pb: 'paddingBottom',
+  pl: 'paddingLeft',
+  px: [ 'paddingLeft', 'paddingRight' ],
+  py: [ 'paddingTop', 'paddingBottom' ],
+  paddingX: [ 'paddingLeft', 'paddingRight' ],
+  paddingY: [ 'paddingTop', 'paddingBottom' ],
+}
+
+const scales = {
+  color: 'colors',
+  backgroundColor: 'colors',
+  borderColor: 'colors',
+  margin: 'space',
+  marginTop: 'space',
+  marginRight: 'space',
+  marginBottom: 'space',
+  marginLeft: 'space',
+  padding: 'space',
+  paddingTop: 'space',
+  paddingRight: 'space',
+  paddingBottom: 'space',
+  paddingLeft: 'space',
+  fontFamily: 'fonts',
+  fontSize: 'fontSizes',
+  fontWeight: 'fontWeights',
+  lineHeight: 'lineHeights',
+  letterSpacing: 'letterSpacings',
+  border: 'borders',
+  borderTop: 'borders',
+  borderRight: 'borders',
+  borderBottom: 'borders',
+  borderLeft: 'borders',
+  borderWidth: 'borderWidths',
+  borderStyle: 'borderStyles',
+  borderRadius: 'radii',
+  boxShadow: 'shadows',
+  zIndex: 'zIndices',
+  width: 'sizes',
+  minWidth: 'sizes',
+  maxWidth: 'sizes',
+  height: 'sizes',
+  minHeight: 'sizes',
+  maxHeight: 'sizes',
+}
+
+export const responsive = styles => theme => {
+  const next = {}
+  const breakpoints = get(theme, 'breakpoints', [ '40em', '52em', '64em' ])
+  const mediaQueries = [ null, ...breakpoints.map(n => `@media screen and (min-width: ${n})`) ]
+
+  for (const key in styles) {
+    const value = styles[key]
+    if (value && !Array.isArray(value) && typeof value === 'object') {
+      next[key] = responsive(value)(theme)
+      continue
+    }
+    if (!Array.isArray(value)) {
+      next[key] = value
+      continue
+    }
+    for (let i = 0; i < value.length; i++) {
+      const media = mediaQueries[i]
+      if (!media) {
+        next[key] = value[i]
+        continue
+      }
+      next[media] = next[media] || {}
+      next[media][key] = value[i]
+    }
+  }
+
+  return next
+}
+
+export const css = args => (props = {}) => {
+  const theme = { ...defaultTheme, ...(props.theme || props) }
+  const result = {}
+  const obj = typeof args === 'function' ? args(theme) : args
+  const styles = responsive(obj)(theme)
+
+  for (const key in styles) {
+    const prop = aliases[key] || key
+    const scaleName = scales[prop] || scales[prop[0]]
+    const scale = get(theme, scaleName, get(theme, prop, {}))
+    const x = styles[key]
+    const val = typeof x === 'function' ? x(theme) : x
+    if (val && typeof val === 'object') {
+      result[prop] = css(val)(theme)
+      continue
+    }
+    const value = get(scale, val, val)
+    if (Array.isArray(prop)) {
+      for (let i = 0; i < prop.length; i++) {
+        result[prop[i]] = value
+      }
+    } else {
+      result[prop] = value
+    }
+  }
+
+  return result
+}
 
 export default css
