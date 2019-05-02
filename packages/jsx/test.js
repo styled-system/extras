@@ -30,7 +30,7 @@ test('renders with responsive styles', () => {
   const json = renderJSON(
     <div
       css={{
-        padding: [ 4, 8, 16 ]
+        padding: [ 1, 2, 3 ]
       }}
     />
   )
@@ -47,8 +47,8 @@ test('renders with shorthand props', () => {
   const json = renderJSON(
     <div
       css={{
-        m: 8,
-        p: 16,
+        m: 2,
+        p: 3,
         bg: 'tomato',
       }}
     />
@@ -90,9 +90,9 @@ test('renders bi-directional props', () => {
   const json = renderJSON(
     <div
       css={{
-        px: 8,
-        py: 16,
-        my: 32,
+        px: 2,
+        py: 3,
+        my: 4,
       }}
     />
   )
