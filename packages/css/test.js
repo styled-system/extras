@@ -32,7 +32,11 @@ const theme = {
       fontSize: [ 1, 2 ],
       letterSpacing: '0.1em',
       textTransform: 'uppercase',
-    }
+    },
+    title: {
+      fontSize: [ 3, 4 ],
+      letterSpacing: [ '-0.01em', '-0.02em']
+    },
   }
 }
 
@@ -196,6 +200,20 @@ test('handles variants with responsive values', t => {
     textTransform: 'uppercase',
     '@media screen and (min-width: 40em)': {
       fontSize: 16,
+    }
+  })
+})
+
+test('handles responsive variants', t => {
+  const res = css({
+    variant: 'text.title',
+  })(theme)
+  t.deepEqual(res, {
+    fontSize: 24,
+    letterSpacing: '-0.01em',
+    '@media screen and (min-width: 40em)': {
+      fontSize: 36,
+      letterSpacing: '-0.02em',
     }
   })
 })
