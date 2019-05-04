@@ -97,7 +97,7 @@ export const responsive = styles => theme => {
 
 export const css = args => (props = {}) => {
   const theme = { ...defaultTheme, ...(props.theme || props) }
-  const result = {}
+  let result = {}
   const obj = typeof args === 'function' ? args(theme) : args
   const styles = responsive(obj)(theme)
 
@@ -109,7 +109,7 @@ export const css = args => (props = {}) => {
     const val = typeof x === 'function' ? x(theme) : x
     if (key === 'variant') {
       const variant = css(get(theme, val))(theme)
-      Object.assign(result, variant)
+      result = { ...result, ...variant }
       continue
     }
     if (val && typeof val === 'object') {
