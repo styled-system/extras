@@ -18,6 +18,26 @@ const theme = {
   fontWeights: {
     bold: 600,
   },
+  buttons: {
+    primary: {
+      p: 3,
+      fontWeight: 'bold',
+      color: 'white',
+      bg: 'primary',
+      borderRadius: 2,
+    },
+  },
+  text: {
+    caps: {
+      fontSize: [ 1, 2 ],
+      letterSpacing: '0.1em',
+      textTransform: 'uppercase',
+    },
+    title: {
+      fontSize: [ 3, 4 ],
+      letterSpacing: [ '-0.01em', '-0.02em']
+    },
+  }
 }
 
 test('returns a function', t => {
@@ -154,5 +174,46 @@ test('supports functional values', t => {
   })(theme)
   t.deepEqual(res, {
     color: 'tomato',
+  })
+})
+
+test('returns variants from theme', t => {
+  const res = css({
+    variant: 'buttons.primary',
+  })(theme)
+  t.deepEqual(res, {
+    padding: 16,
+    fontWeight: 600,
+    color: 'white',
+    backgroundColor: 'tomato',
+    borderRadius: 2,
+  })
+})
+
+test('handles variants with responsive values', t => {
+  const res = css({
+    variant: 'text.caps',
+  })(theme)
+  t.deepEqual(res, {
+    fontSize: 14,
+    letterSpacing: '0.1em',
+    textTransform: 'uppercase',
+    '@media screen and (min-width: 40em)': {
+      fontSize: 16,
+    }
+  })
+})
+
+test('handles responsive variants', t => {
+  const res = css({
+    variant: 'text.title',
+  })(theme)
+  t.deepEqual(res, {
+    fontSize: 24,
+    letterSpacing: '-0.01em',
+    '@media screen and (min-width: 40em)': {
+      fontSize: 36,
+      letterSpacing: '-0.02em',
+    }
   })
 })

@@ -81,10 +81,6 @@ export const responsive = styles => theme => {
 
   for (const key in styles) {
     const value = styles[key]
-    if (value && !Array.isArray(value) && typeof value === 'object') {
-      next[key] = responsive(value)(theme)
-      continue
-    }
     if (!Array.isArray(value)) {
       next[key] = value
       continue
@@ -105,7 +101,7 @@ export const responsive = styles => theme => {
 
 export const css = args => (props = {}) => {
   const theme = { ...defaultTheme, ...(props.theme || props) }
-  const result = {}
+  let result = {}
   const obj = typeof args === 'function' ? args(theme) : args
   const styles = responsive(obj)(theme)
 
@@ -115,6 +111,11 @@ export const css = args => (props = {}) => {
     const scale = get(theme, scaleName, get(theme, prop, {}))
     const x = styles[key]
     const val = typeof x === 'function' ? x(theme) : x
+    if (key === 'variant') {
+      const variant = css(get(theme, val))(theme)
+      result = { ...result, ...variant }
+      continue
+    }
     if (val && typeof val === 'object') {
       result[prop] = css(val)(theme)
       continue
