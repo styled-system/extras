@@ -99,6 +99,8 @@ export const responsive = styles => theme => {
   return next
 }
 
+const RAW = /^_/
+
 export const css = args => (props = {}) => {
   const theme = { ...defaultTheme, ...(props.theme || props) }
   let result = {}
@@ -106,7 +108,8 @@ export const css = args => (props = {}) => {
   const styles = responsive(obj)(theme)
 
   for (const key in styles) {
-    const prop = aliases[key] || key
+    const isRaw = RAW.test(key)
+    const prop = isRaw ? key.replace(RAW, '') : (aliases[key] || key)
     const scaleName = scales[prop] || scales[prop[0]]
     const scale = get(theme, scaleName, get(theme, prop, {}))
     const x = styles[key]
@@ -120,7 +123,7 @@ export const css = args => (props = {}) => {
       result[prop] = css(val)(theme)
       continue
     }
-    const value = get(scale, val, val)
+    const value = isRaw || x.raw ? val : get(scale, val, val)
     if (Array.isArray(prop)) {
       for (let i = 0; i < prop.length; i++) {
         result[prop[i]] = value
@@ -131,6 +134,12 @@ export const css = args => (props = {}) => {
   }
 
   return result
+}
+
+export const raw = n => {
+  const fn = t => n
+  fn.raw = true
+  return fn
 }
 
 export default css

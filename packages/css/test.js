@@ -1,5 +1,5 @@
 import test from 'ava'
-import css from './index'
+import css, { raw } from './index'
 
 const theme = {
   colors: {
@@ -215,5 +215,24 @@ test('handles responsive variants', t => {
       fontSize: 36,
       letterSpacing: '-0.02em',
     }
+  })
+})
+
+// WIP raw value API explorations
+test('returns raw values', t => {
+  const res = css({
+    margin: raw(2),
+  })(theme)
+  t.deepEqual(res, {
+    margin: 2
+  })
+})
+
+test('returns raw value with _ prefixed properties', t => {
+  const res = css({
+    _margin: 2,
+  })(theme)
+  t.deepEqual(res, {
+    margin: 2,
   })
 })
