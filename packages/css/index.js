@@ -18,17 +18,20 @@ const aliases = {
   mr: 'marginRight',
   mb: 'marginBottom',
   ml: 'marginLeft',
-  mx: [ 'marginLeft', 'marginRight' ],
-  my: [ 'marginTop', 'marginBottom' ],
-  marginX: [ 'marginLeft', 'marginRight' ],
-  marginY: [ 'marginTop', 'marginBottom' ],
+  mx: 'marginX',
+  my: 'marginY',
   p: 'padding',
   pt: 'paddingTop',
   pr: 'paddingRight',
   pb: 'paddingBottom',
   pl: 'paddingLeft',
-  px: [ 'paddingLeft', 'paddingRight' ],
-  py: [ 'paddingTop', 'paddingBottom' ],
+  px: 'paddingX',
+  py: 'paddingY',
+}
+
+const directions = {
+  marginX: [ 'marginLeft', 'marginRight' ],
+  marginY: [ 'marginTop', 'marginBottom' ],
   paddingX: [ 'paddingLeft', 'paddingRight' ],
   paddingY: [ 'paddingTop', 'paddingBottom' ],
 }
@@ -42,11 +45,15 @@ const scales = {
   marginRight: 'space',
   marginBottom: 'space',
   marginLeft: 'space',
+  marginX: 'space',
+  marginY: 'space',
   padding: 'space',
   paddingTop: 'space',
   paddingRight: 'space',
   paddingBottom: 'space',
   paddingLeft: 'space',
+  paddingX: 'space',
+  paddingY: 'space',
   fontFamily: 'fonts',
   fontSize: 'fontSizes',
   fontWeight: 'fontWeights',
@@ -72,6 +79,26 @@ const scales = {
   height: 'sizes',
   minHeight: 'sizes',
   maxHeight: 'sizes',
+}
+
+const getMargin = (scale, value) => {
+  if (typeof value !== 'number' || value >= 0) {
+    return get(scale, value, value)
+  }
+  const absolute = Math.abs(value)
+  const n = get(scale, absolute, absolute)
+  if (typeof n === 'string') return '-' + n
+  return n * -1
+}
+
+const transforms = {
+  margin: getMargin,
+  marginTop: getMargin,
+  marginRight: getMargin,
+  marginBottom: getMargin,
+  marginLeft: getMargin,
+  marginX: getMargin,
+  marginY: getMargin,
 }
 
 export const responsive = styles => theme => {
@@ -106,8 +133,8 @@ export const css = args => (props = {}) => {
   const styles = responsive(obj)(theme)
 
   for (const key in styles) {
-    const prop = aliases[key] || key
-    const scaleName = scales[prop] || scales[prop[0]]
+    const prop = get(aliases, key, key)
+    const scaleName = get(scales, prop)
     const scale = get(theme, scaleName, get(theme, prop, {}))
     const x = styles[key]
     const val = typeof x === 'function' ? x(theme) : x
@@ -120,10 +147,12 @@ export const css = args => (props = {}) => {
       result[prop] = css(val)(theme)
       continue
     }
-    const value = get(scale, val, val)
-    if (Array.isArray(prop)) {
-      for (let i = 0; i < prop.length; i++) {
-        result[prop[i]] = value
+    const transform = get(transforms, prop, get)
+    const value = transform(scale, val, val)
+    if (directions[prop]) {
+      const dirs = directions[prop]
+      for (let i = 0; i < dirs.length; i++) {
+        result[dirs[i]] = value
       }
     } else {
       result[prop] = value
