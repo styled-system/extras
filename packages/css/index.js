@@ -150,7 +150,6 @@ export const css = args => (props = {}) => {
     const transform = get(transforms, prop, get)
     const value = transform(scale, val, val)
     if (directions[prop]) {
-      // if (Array.isArray(prop)) {
       const dirs = directions[prop]
       for (let i = 0; i < dirs.length; i++) {
         result[dirs[i]] = value
