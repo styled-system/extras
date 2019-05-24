@@ -217,3 +217,15 @@ test('handles responsive variants', t => {
     }
   })
 })
+
+test('handles negative margins from scale', t => {
+  const result = css({
+    mt: -3,
+    mx: -4,
+  })(theme)
+  t.deepEqual(result, {
+    marginTop: -16,
+    marginLeft: -32,
+    marginRight: -32,
+  })
+})
